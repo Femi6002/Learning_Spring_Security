@@ -1,4 +1,4 @@
-package com.workshop.femi.auth.auth.service;
+package com.workshop.femi.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
