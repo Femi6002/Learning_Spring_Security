@@ -1,12 +1,15 @@
 package com.workshop.femi.auth.auth.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
 
@@ -26,7 +29,7 @@ public class JwtService {
 
     // extract information from JWT
     private Claims extractAllClaims(String token) {
-        return jwts
+        return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
@@ -46,8 +49,15 @@ public class JwtService {
     }
 
     private String generateToken(HashMap<String,Object> extractClaims, UserDetails userDetails) {
-        return jwts
+        return Jwts
                 .builder()
-                .set
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 2000 * 60 * 24))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+
     }
+
 }
